@@ -4,6 +4,9 @@
 #include <math.h>
 #include "udf.hpp"
 #include "plugins/RANSktau.hpp"
+#include "client.h"
+#include <vector>
+#include <string>
 
 /* User Functions */
 
@@ -64,6 +67,35 @@ void UDF_Setup(nrs_t *nrs)
   platform->options.getArgs("VISCOSITY", mueLam); 
   platform->options.getArgs("DENSITY", rho); 
   RANSktau::setup(nrs, mueLam, rho, scalarFieldStart);
+
+  size_t dim1 = 3;
+  size_t dim2 = 2;
+  size_t dim3 = 5;
+  std::vector<size_t> dims = {3, 2, 5};
+  size_t n_values = dim1 * dim2 * dim3;
+  std::vector<double> input_tensor(n_values, 0);
+  for(size_t i=0; i<n_values; i++)
+    input_tensor[i] = 2.0*rand()/RAND_MAX - 1.0;
+
+  std::string logger_name("Client ");
+  int rank = 0;
+  logger_name += std::to_string(rank);
+  bool cluster_mode = false;
+  SmartRedis::Client client(cluster_mode, logger_name);
+
+  std::string key = "3d_tensor_" + std::to_string(rank);
+  client.put_tensor(key, input_tensor.data(), dims,
+                    SRTensorTypeDouble, SRMemLayoutContiguous);
+
+  std::vector<double> unpack_tensor(n_values, 0);
+  client.unpack_tensor(key, unpack_tensor.data(), {n_values},
+                       SRTensorTypeDouble, SRMemLayoutContiguous);
+
+  std::cout<<"Comparison of the sent and "\
+              "retrieved (via unpack) values: "<<std::endl;
+  for(size_t i=0; i<n_values; i++)
+    std::cout<<"Sent: "<<input_tensor[i]<<" "
+              <<"Received: "<<unpack_tensor[i]<<std::endl;
 }
 
 void UDF_ExecuteStep(nrs_t *nrs, dfloat time, int tstep)
