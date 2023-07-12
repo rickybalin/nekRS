@@ -43,6 +43,8 @@ set(ENABLE_METAL OFF CACHE BOOL "Enable OCCA Metal support")
 set(ENABLE_AMGX OFF CACHE BOOL "Enable NVIDIA AMGX support")
 set(GPU_MPI "1" CACHE STRING "GPU aware MPI")
 
+set(ENABLE_SMARTREDIS OFF CACHE BOOL "Enable SmartRedis for in situ ML")
+
 ###############################################################################
 # Check compiler/MPI vendor, version and Fortran/C compatibility              #
 ###############################################################################
@@ -163,6 +165,14 @@ endmacro()
 
 check_fcompiler_id("${CMAKE_Fortran_COMPILER_ID}")
 include(config/nek5000.cmake)
+
+###############################################################################
+# Find SmartRedis Libraries
+###############################################################################
+
+if(ENABLE_SMARTREDIS)
+  find_library(SR_LIB smartredis PATHS ${SMARTREDIS_PATH}/install/lib NO_DEFAULT_PATH REQUIRED)
+endif()
 
 ###############################################################################
 # Build NekRS
@@ -291,6 +301,12 @@ if(ENABLE_AMGX AND ENABLE_CUDA)
   target_include_directories(nekrs-lib PUBLIC 3rd_party/AMGX/base/include 3rd_party/AMGX/core/include)
 endif()
 
+if(ENABLE_SMARTREDIS)
+  target_compile_definitions(nekrs-lib PUBLIC -DENABLE_SMARTREDIS)
+  target_include_directories(nekrs-lib PUBLIC ${SMARTREDIS_PATH}/include)
+  target_link_libraries(nekrs-lib PUBLIC ${SR_LIB})
+endif()
+
 add_executable(nekrs-bin src/main.cpp)
 target_include_directories(nekrs-bin PRIVATE src/lib)
 set_target_properties(nekrs-bin PROPERTIES LINKER_LANGUAGE CXX OUTPUT_NAME nekrs)
@@ -372,6 +388,9 @@ if(GPU_MPI)
   message(NOTICE "GPU aware MPI support enabled")
 else(GPU_MPI)
   message(NOTICE "GPU aware MPI support disabled!")
+endif()
+if(ENABLE_SMARTREDIS)
+  message(NOTICE "SmartRedis support enabled")
 endif()
 message(NOTICE "-------------------------------------------")
 

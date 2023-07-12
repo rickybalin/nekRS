@@ -21,6 +21,9 @@ set -e -a
 : ${OCCA_ENABLE_OPENCL:=0}
 : ${ENABLE_AMGX:=0}
 
+: ${ENABLE_SMARTREDIS:=1}
+: ${SMARTREDIS_PATH:="/Users/rbalin/Documents/Research/ALCF_PostDoc/SmartSim/env/SmartRedis"}
+
 if uname -a | grep 'ppc64'; then
   NEKRS_COMPILER_FLAGS=$(echo "$NEKRS_COMPILER_FLAGS" | sed -e "s/march/mcpu/g")
 fi
@@ -59,6 +62,8 @@ cmake -Wno-dev \
       -DENABLE_OPENCL="${OCCA_ENABLE_OPENCL}" \
       -DGPU_MPI="${NEKRS_GPU_MPI}" \
       -DENABLE_AMGX="${ENABLE_AMGX}" \
+      -DENABLE_SMARTREDIS="${ENABLE_SMARTREDIS}" \
+      -DSMARTREDIS_PATH="${SMARTREDIS_PATH}" \
       .. 
 
 if [ $? -eq 0 ]; then
