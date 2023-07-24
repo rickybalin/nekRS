@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.11)
 
 set_property(GLOBAL PROPERTY RULE_MESSAGES OFF)
 
-set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_SHARED_LIBRARY_SUFFIX ".so")
 
@@ -32,6 +32,9 @@ set(INCLUDE_DIRS
   ${NEKRS_INSTALL_DIR}/include/linAlg
   ${NEKRS_INSTALL_DIR}/include/postProcessing
   ${NEKRS_INSTALL_DIR}/occa/include
+  ${NEKRS_INSTALL_DIR}/hiredis
+  ${NEKRS_INSTALL_DIR}/hiredis/adapters
+  ${NEKRS_INSTALL_DIR}/sw/redis++
 )
 
 add_library(UDF SHARED udf.cpp)
