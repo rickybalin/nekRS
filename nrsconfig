@@ -22,7 +22,7 @@ set -e -a
 : ${ENABLE_AMGX:=0}
 
 : ${ENABLE_SMARTREDIS:=1}
-: ${SMARTREDIS_PATH:="/Users/rbalin/Documents/Research/ALCF_PostDoc/SmartSim/env/SmartRedis"}
+: ${SMARTREDIS_PATH:="/Users/rbalin/Documents/Research/ALCF_PostDoc/Nek/NekRS/SmartSim/SmartRedis"}
 
 if uname -a | grep 'ppc64'; then
   NEKRS_COMPILER_FLAGS=$(echo "$NEKRS_COMPILER_FLAGS" | sed -e "s/march/mcpu/g")

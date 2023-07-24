@@ -56,6 +56,7 @@ void UDF_LoadKernels(occa::properties& kernelInfo)
 
 void UDF_Setup(nrs_t *nrs)
 {
+  std::cout<<"Running UDF_Setup()"<<std::endl;
   mesh_t *mesh = nrs->meshV;
   cds_t *cds = nrs->cds;
 
@@ -82,6 +83,7 @@ void UDF_Setup(nrs_t *nrs)
   logger_name += std::to_string(rank);
   bool cluster_mode = false;
   SmartRedis::Client client(cluster_mode, logger_name);
+  std::cout<<"\n"<<"Initialized client"<<std::endl;
 
   std::string key = "3d_tensor_" + std::to_string(rank);
   client.put_tensor(key, input_tensor.data(), dims,
