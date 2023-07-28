@@ -32,9 +32,9 @@ set(INCLUDE_DIRS
   ${NEKRS_INSTALL_DIR}/include/linAlg
   ${NEKRS_INSTALL_DIR}/include/postProcessing
   ${NEKRS_INSTALL_DIR}/occa/include
-  ${NEKRS_INSTALL_DIR}/hiredis
-  ${NEKRS_INSTALL_DIR}/hiredis/adapters
-  ${NEKRS_INSTALL_DIR}/sw/redis++
+  ${NEKRS_INSTALL_DIR}/include/hiredis
+  ${NEKRS_INSTALL_DIR}/include/hiredis/adapters
+  ${NEKRS_INSTALL_DIR}/include/sw/redis++
 )
 
 add_library(UDF SHARED udf.cpp)

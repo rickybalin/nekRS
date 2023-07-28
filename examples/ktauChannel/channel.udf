@@ -4,9 +4,10 @@
 #include <math.h>
 #include "udf.hpp"
 #include "plugins/RANSktau.hpp"
-#include "client.h"
-#include <vector>
-#include <string>
+#include "plugins/smartRedis.hpp"
+//#include "client.h"
+//#include <vector>
+//#include <string>
 
 /* User Functions */
 
@@ -69,6 +70,12 @@ void UDF_Setup(nrs_t *nrs)
   platform->options.getArgs("DENSITY", rho); 
   RANSktau::setup(nrs, mueLam, rho, scalarFieldStart);
 
+  std::cout<<"\n"<<"Calling init_client()"<<std::endl;
+  smartredis::init_client();
+
+  // Example of initializig the SmartRedis client, 
+  // sending and retrieving a tensor from DB
+  /*
   size_t dim1 = 3;
   size_t dim2 = 2;
   size_t dim3 = 5;
@@ -98,8 +105,13 @@ void UDF_Setup(nrs_t *nrs)
   for(size_t i=0; i<n_values; i++)
     std::cout<<"Sent: "<<input_tensor[i]<<" "
               <<"Received: "<<unpack_tensor[i]<<std::endl;
+  */
 }
 
 void UDF_ExecuteStep(nrs_t *nrs, dfloat time, int tstep)
 {
+  if (tstep%10) {
+    smartredis::put_tensor();
+    smartredis::get_tensor();
+  }
 }

@@ -68,7 +68,7 @@ if (NOT FortranCInterface_VERIFIED_CXX)
 endif()
 
 set (CMAKE_C_STANDARD 99)
-set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD 17)
 
 ###############################################################################
 # Set compiler flags                                                          #
@@ -230,6 +230,7 @@ set(SRC
     src/plugins/velRecycling.cpp
     src/plugins/RANSktau.cpp
     src/plugins/lowMach.cpp
+    src/plugins/smartRedis.cpp
     src/udf/udf.cpp
     src/udf/compileUDFKernels.cpp
     src/nekInterface/nekInterfaceAdapter.cpp
