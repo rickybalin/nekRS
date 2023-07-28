@@ -6,7 +6,7 @@ struct smartredis_data {
   SmartRedis::Client *client;
   int ranks_per_db;
 };
-extern smartredis_data sr;
+extern smartredis_data *sr;
 
 namespace smartredis
 {
