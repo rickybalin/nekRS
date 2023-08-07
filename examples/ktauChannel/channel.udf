@@ -78,42 +78,7 @@ void UDF_ExecuteStep(nrs_t *nrs, dfloat time, int tstep)
 {
   // Send and retrieve tensor to DB every 10 steps
   if (tstep%10==0) {
-    smartredis::put_tensor();
-    smartredis::get_tensor();
+    nek::ocopyToNek(time, tstep);
+    smartredis::put_data(nrs, time, tstep);
   }
 }
-
-
-  // Example of initializig the SmartRedis client, 
-  // sending and retrieving a tensor from DB
-  /*
-  size_t dim1 = 3;
-  size_t dim2 = 2;
-  size_t dim3 = 5;
-  std::vector<size_t> dims = {3, 2, 5};
-  size_t n_values = dim1 * dim2 * dim3;
-  std::vector<double> input_tensor(n_values, 0);
-  for(size_t i=0; i<n_values; i++)
-    input_tensor[i] = 2.0*rand()/RAND_MAX - 1.0;
-
-  std::string logger_name("Client ");
-  int rank = 0;
-  logger_name += std::to_string(rank);
-  bool cluster_mode = false;
-  SmartRedis::Client client(cluster_mode, logger_name);
-  std::cout<<"\n"<<"Initialized client"<<std::endl;
-
-  std::string key = "3d_tensor_" + std::to_string(rank);
-  client.put_tensor(key, input_tensor.data(), dims,
-                    SRTensorTypeDouble, SRMemLayoutContiguous);
-
-  std::vector<double> unpack_tensor(n_values, 0);
-  client.unpack_tensor(key, unpack_tensor.data(), {n_values},
-                       SRTensorTypeDouble, SRMemLayoutContiguous);
-
-  std::cout<<"Comparison of the sent and "\
-              "retrieved (via unpack) values: "<<std::endl;
-  for(size_t i=0; i<n_values; i++)
-    std::cout<<"Sent: "<<input_tensor[i]<<" "
-              <<"Received: "<<unpack_tensor[i]<<std::endl;
-  */
