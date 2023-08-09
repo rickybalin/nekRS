@@ -7,3 +7,6 @@ CMakeFiles
 plugin_config.cu
 *.swp
 .cache/
+*.out
+*.err
+*/cmake.log
