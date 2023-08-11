@@ -1,6 +1,5 @@
 #include "nrs.hpp"
 #include "nekInterfaceAdapter.hpp"
-#include "client.h"
 
 struct smartredis_data {
   int ranks_per_db;
